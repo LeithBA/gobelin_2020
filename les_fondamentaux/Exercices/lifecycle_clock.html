@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        class Clock extends React.Component {
+
+            constructor(props) {
+                super(props);
+
+                this.state = {
+                    date: new Date,
+                }
+
+                this.interval = null;
+            }
+
+            render() {
+                const { date } = this.state;
+
+                return (
+                    <h1>{date.toLocaleTimeString()}</h1>
+                )
+            }
+
+            componentDidMount() {
+                this.interval = setInterval(() => {
+                    this.setState({
+                        date: new Date
+                    });
+                    console.log("clock tick");
+                }, 1000);
+                console.log("clock mounted");
+            }
+
+            componentWillUnmount() {
+                clearInterval(this.interval);
+                console.log("clock unmounted");
+            }
+        }
+
+        class App extends React.Component {
+
+            constructor(props) {
+                super(props);
+                this.state = {
+                    isAlive: true
+                }
+            }
+
+            componentDidMount() {
+                //sets lifespan
+                setTimeout(() => {
+                    this.setState({ isAlive: false });
+                }, 5000);
+            }
+
+            render() {
+                const { isAlive } = this.state;
+
+                if (isAlive)
+                    return (<Clock />);
+
+                return (<h1>Time is up</h1>);
+            }
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+
+</html>
