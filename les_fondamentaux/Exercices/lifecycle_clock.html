@@ -74,10 +74,7 @@
             render() {
                 const { isAlive } = this.state;
 
-                if (isAlive)
-                    return (<Clock />);
-
-                return (<h1>Time is up</h1>);
+                return (isAlive && <Clock /> || <h1>time is up</h1>);
             }
         }
 
