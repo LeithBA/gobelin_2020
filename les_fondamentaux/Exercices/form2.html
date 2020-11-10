@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        class Form extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    val: '',
+                    mults: [],
+                    message: '',
+                };
+
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSubmit = this.handleSubmit.bind(this);
+            }
+
+            handleChange(event) {
+                const { val, value } = event.target;
+                this.setState({ val: value });
+            }
+
+            handleSubmit(event) {
+                let invalid = false;
+                let val = this.state.val;
+
+                if (val == 0 || val == undefined)
+                    invalid = true;
+
+                let mults = [];
+
+                console.log(val);
+
+                if (!invalid) {
+
+                    for (let i = 0; i < 100; i++) {
+                        if (i % val === 0) {
+                            mults.push(i + "   ");
+                        }
+                    }
+
+                    this.setState({ mults: mults })
+                }
+                else {
+                    this.setState({ mults: "", message: "Value not valid" });
+                }
+
+                event.preventDefault();
+            }
+
+            render() {
+                const { val, mults, message } = this.state;
+                return (
+                    <form onSubmit={this.handleSubmit}>
+                        <div>
+                            <label>
+                                Value:
+                                <input
+                                    type="number"
+                                    onChange={this.handleChange}
+                                />
+                            </label>
+                        </div>
+                        <input type="submit" value="Calculate" />
+                        <div>{message}</div>
+                        <div >{mults}</div>
+                    </form>
+                );
+            }
+        }
+
+
+        const rootElement = document.getElementById("root");
+        ReactDOM.render(
+            <React.StrictMode>
+                <Form />
+            </React.StrictMode>,
+            rootElement
+        );
+    </script>
+</body>
+
+</html>
