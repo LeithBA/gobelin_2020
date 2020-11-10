@@ -45,17 +45,24 @@
             }
 
             handleSubmit(event) {
-                let exists = false;
+                let invalid = false;
                 let currentUsers = this.state.users;
                 let username = this.state.name + "_" + this.state.lastname + "  ";
-                currentUsers.forEach(element => {
-                    if (username == element) {
-                        exists = true;
-                        this.setState({ message: username + " already exists!" });
-                        return;
-                    }
-                });
-                if (!exists) {
+                if (currentUsers.includes(username)) {
+                    this.setState({
+                        message: username + " already exists!",
+                    });
+                    invalid = true;
+                }
+
+                if (this.state.name == "" || this.state.lastname == "") {
+                    this.setState({
+                        message: "username invalid!",
+                    });
+                    invalid = true;
+                }
+
+                if (!invalid) {
 
                     currentUsers.push(username);
                     this.setState({
@@ -63,6 +70,7 @@
                         message: username + " added!"
                     });
                 }
+
                 event.preventDefault();
             }
 
@@ -94,7 +102,7 @@
                         </div>
                         <input type="submit" value="Add user" />
                         <div>{message}</div>
-                        <div>{users}</div>
+                        <div >{users}</div>
                     </form>
                 );
             }
