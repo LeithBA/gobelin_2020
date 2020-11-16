@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const TIME_COUNTER = 1000;
+        const CONTAINER = document.getElementById('root');
+        let interval = null;
+
+        const Counter = () => {
+            const [count, setCount] = React.useState(0);
+            const [active, setActive] = React.useState(false);
+
+            React.useEffect(() => {
+
+                clearInterval(interval);
+
+                if (active === true) {
+                    interval = setInterval(() => {
+                        setCount(count => count + 1);
+                        console.log(Math.random());
+                    }, TIME_COUNTER);
+                }
+
+            }, [active]);
+
+            // LIFE CYCLE
+            React.useEffect(() => {
+
+                // METHODE UNIQUEMENT APPELEE AU DENOMTAGE DU COMPOSANT COUNTER
+                return () => clearInterval(interval);
+
+            }, []);
+
+            return (
+                <React.Fragment>
+                    <p>Counter {count}</p>
+                    <div>
+                        <button onClick={() => setActive(false)} style="display:block">Stop</button>
+                        <button onClick={() => setActive(true)}>Start</button>
+                    </div>
+                </React.Fragment>
+            );
+        }
+
+        const App = () => {
+
+            const [display, setDisplay] = React.useState(false);
+
+            const toggle = () => setDisplay(!display);
+
+            return (
+                <div>
+                    <p><button onClick={toggle}>Toggle counter</button></p>
+                    { display && <Counter />}
+                </div>
+            );
+        }
+
+        ReactDOM.render(
+            <App />,
+            CONTAINER
+        );
+    </script>
+</body>
+
+</html>

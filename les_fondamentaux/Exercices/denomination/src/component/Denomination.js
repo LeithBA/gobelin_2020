@@ -31,7 +31,7 @@ class Denomination extends Component {
         const { amount } = this.state;
 
         // vérification que c'est bien un entier
-        if (parseInt(amount) != amount) {
+        if (parseInt(amount) != amount || amount < 0) {
 
             this.setState({
                 message: `${amount} is not a valid amount`
@@ -48,7 +48,7 @@ class Denomination extends Component {
 
     calcul(N) {
 
-        const results = [{ 'amount': N }];
+        let results = [{ 'amount': N }];
 
         for (const d of this.denominations.reverse()) {
             let nbD = Math.floor(N / d);

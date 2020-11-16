@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const url = `https://jsonplaceholder.typicode.com/users`;
+
+        var getJSON = function (url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'json';
+            xhr.onload = function () {
+                var status = xhr.status;
+                if (status === 200) {
+                    callback(null, xhr.response);
+                } else {
+                    callback(status, xhr.response);
+                }
+            };
+            xhr.send();
+        };
+        let users = [];
+        getJSON(url,
+            function (err, data) {
+                if (err !== null) {
+                    alert('Something went wrong: ' + err);
+                } else {
+                    data.forEach(user => {
+                        users.push(user.name);
+                    });;
+                }
+            });
+
+
+        const UserSearch = () => {
+
+            const handleChange = (event) => {
+                let tempUsers = [];
+                users.forEach(user => {
+                    if (user.toLowerCase().includes(event.target.value.toLowerCase())) {
+                        tempUsers.push(user);
+                    }
+                });
+                tempUsers = tempUsers.map((u) =>
+                    <li>{u}</li>
+                );
+                refreshUsers(tempUsers);
+            }
+
+
+            return (
+                <div>
+                    <input
+                        onChange={handleChange}></input>
+                    <h1> Users
+                    </h1>
+                    <ul>
+                        {currentUsers}
+                    </ul>
+                </div>
+            )
+        }
+
+        ReactDOM.render(
+            <UserSearch />,
+            document.getElementById('root')
+        );
+
+
+    </script>
+</body>
+
+</html>
