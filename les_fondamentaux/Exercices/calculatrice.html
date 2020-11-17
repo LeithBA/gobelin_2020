@@ -42,7 +42,7 @@
                     state.result = state.value1 * state.value2;
                     break;
                 case '/':
-                    state.result = (state.value2 != 0) ? state.value1 / state.value2 : 0;
+                    state.result = (state.value2 != 0) ? state.value1 / state.value2 : "Impossible";
                     break;
                 default:
                     break;
@@ -66,15 +66,14 @@
 
             return (
                 <React.Fragment>
-                    <input type="number" onChange={change1}></input>
-                    <input type="number" onChange={change2}></input>
-                    <br />
+                    <input type="number" value={state.value1} onChange={change1}></input>
+                    <input type="number" value={state.value2} onChange={change2}></input>
+                    <br /><br />
                     <button onClick={() => dispatch({ type: '+' })}>+</button>
                     <button onClick={() => dispatch({ type: '-' })}>-</button>
                     <button onClick={() => dispatch({ type: '*' })}>*</button>
                     <button onClick={() => dispatch({ type: '/' })}>/</button>
-                    <br />
-                    <br />
+                    <br /><br />
                     {state.value1} {state.type} {state.value2} = {state.result}
                 </React.Fragment>
             );
