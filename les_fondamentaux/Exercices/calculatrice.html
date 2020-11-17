@@ -23,31 +23,45 @@
         const initialState = { value1: 0, value2: 0, type: "+", result: 0 };
 
         const reducer = (state, action) => {
-            switch (action.type) {
+
+            if (action.type != undefined)
+                state.type = action.type;
+            if (action.value1 != undefined)
+                state.value1 = action.value1;
+            if (action.value2 != undefined)
+                state.value2 = action.value2;
+
+            switch (state.type) {
                 case '+':
-                    return { result: action.value1 + action.value2, value1: action.value1, value2: action.value2, type: action.type };
+                    state.result = state.value1 + state.value2;
+                    break;
                 case '-':
-                    return { result: action.value1 - action.value2, value1: action.value1, value2: action.value2, type: action.type };
+                    state.result = state.value1 - state.value2;
+                    break;
                 case '*':
-                    return { result: action.value1 * action.value2, value1: action.value1, value2: action.value2, type: action.type };
+                    state.result = state.value1 * state.value2;
+                    break;
                 case '/':
-                    return { result: (action.value2 != 0) ? action.value1 / action.value2 : 0, value1: action.value1, value2: action.value2, type: action.type };
+                    state.result = (state.value2 != 0) ? state.value1 / state.value2 : 0;
+                    break;
                 default:
-                    return state;
+                    break;
+
             }
+            console.log(state);
+            return { value1: state.value1, value2: state.value2, type: state.type, result: state.result };
         }
 
-
-        let [val1, val2] = [0, 0];
         function Counter() {
+
             const [state, dispatch] = React.useReducer(reducer, initialState);
 
-            function change1(v) {
-                val1 = parseInt(v.target.value, 10)
+            function change1(e) {
+                dispatch({ value1: parseInt(e.target.value, 10) })
             }
 
-            function change2(v) {
-                val2 = parseInt(v.target.value, 10)
+            function change2(e) {
+                dispatch({ value2: parseInt(e.target.value, 10) })
             }
 
             return (
@@ -55,14 +69,14 @@
                     <input type="number" onChange={change1}></input>
                     <input type="number" onChange={change2}></input>
                     <br />
-                    <button onClick={() => dispatch({ type: '+', value1: val1, value2: val2 })}>+</button>
-                    <button onClick={() => dispatch({ type: '-', value1: val1, value2: val2 })}>-</button>
-                    <button onClick={() => dispatch({ type: '*', value1: val1, value2: val2 })}>*</button>
-                    <button onClick={() => dispatch({ type: '/', value1: val1, value2: val2 })}>/</button>
+                    <button onClick={() => dispatch({ type: '+' })}>+</button>
+                    <button onClick={() => dispatch({ type: '-' })}>-</button>
+                    <button onClick={() => dispatch({ type: '*' })}>*</button>
+                    <button onClick={() => dispatch({ type: '/' })}>/</button>
                     <br />
-                    Result :
+                    Result : {state.result}
                     <br />
-                    {state.value1}  {state.type} {state.value2} = {state.result}
+                    {state.value1} {state.type} {state.value2} = {state.result}
                 </React.Fragment>
             );
         }
