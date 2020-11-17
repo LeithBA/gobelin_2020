@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const initialState = { value1: 0, value2: 0, result: 0 };
+
+        const reducer = (state, action) => {
+            console.log(action.value1 + " " + action.type + " " + action.value2);
+            switch (action.type) {
+                case 'add':
+                    return { result: action.value1 + action.value2 };
+                case 'sub':
+                    return { result: action.value1 - action.value2 };
+                case 'mul':
+                    return { result: action.value1 - action.value2 };
+                case 'div':
+                    return { result: (action.value2 != 0) ? action.value1 / action.value2 : 0 };
+                default:
+                    return state;
+            }
+            console.log(state);
+        }
+
+
+        let [val1, val2] = [0, 0];
+        function Counter() {
+            const [state, dispatch] = React.useReducer(reducer, initialState);
+
+            function change1(v) {
+                val1 = parseInt(v.target.value, 10)
+            }
+
+            function change2(v) {
+                val2 = parseInt(v.target.value, 10)
+            }
+
+            return (
+                <React.Fragment>
+                    <input type="number" onChange={change1}></input>
+                    <input type="number" onChange={change2}></input>
+                    <br />
+                    <button onClick={() => dispatch({ type: 'add', value1: val1, value2: val2 })}>+</button>
+                    <button onClick={() => dispatch({ type: 'sub', value1: val1, value2: val2 })}>-</button>
+                    <button onClick={() => dispatch({ type: 'mul', value1: val1, value2: val2 })}>*</button>
+                    <button onClick={() => dispatch({ type: 'div', value1: val1, value2: val2 })}>/</button>
+                    <br />
+                    Result : {state.result}
+                </React.Fragment>
+            );
+        }
+
+        ReactDOM.render(
+            <Counter />,
+            document.getElementById('root')
+        );
+
+
+    </script>
+</body>
+
+</html>

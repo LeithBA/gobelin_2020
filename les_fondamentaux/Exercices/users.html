@@ -50,6 +50,7 @@
 
 
         const UserSearch = () => {
+            const [currentUsers, refreshUsers] = React.useState(users);
 
             const handleChange = (event) => {
                 let tempUsers = [];
