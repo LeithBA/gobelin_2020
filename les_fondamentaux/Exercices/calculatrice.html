@@ -20,23 +20,21 @@
     <div id="root"></div>
     <script type="text/babel">
 
-        const initialState = { value1: 0, value2: 0, result: 0 };
+        const initialState = { value1: 0, value2: 0, type: "+", result: 0 };
 
         const reducer = (state, action) => {
-            console.log(action.value1 + " " + action.type + " " + action.value2);
             switch (action.type) {
-                case 'add':
-                    return { result: action.value1 + action.value2 };
-                case 'sub':
-                    return { result: action.value1 - action.value2 };
-                case 'mul':
-                    return { result: action.value1 - action.value2 };
-                case 'div':
-                    return { result: (action.value2 != 0) ? action.value1 / action.value2 : 0 };
+                case '+':
+                    return { result: action.value1 + action.value2, value1: action.value1, value2: action.value2, type: action.type };
+                case '-':
+                    return { result: action.value1 - action.value2, value1: action.value1, value2: action.value2, type: action.type };
+                case '*':
+                    return { result: action.value1 * action.value2, value1: action.value1, value2: action.value2, type: action.type };
+                case '/':
+                    return { result: (action.value2 != 0) ? action.value1 / action.value2 : 0, value1: action.value1, value2: action.value2, type: action.type };
                 default:
                     return state;
             }
-            console.log(state);
         }
 
 
@@ -57,12 +55,14 @@
                     <input type="number" onChange={change1}></input>
                     <input type="number" onChange={change2}></input>
                     <br />
-                    <button onClick={() => dispatch({ type: 'add', value1: val1, value2: val2 })}>+</button>
-                    <button onClick={() => dispatch({ type: 'sub', value1: val1, value2: val2 })}>-</button>
-                    <button onClick={() => dispatch({ type: 'mul', value1: val1, value2: val2 })}>*</button>
-                    <button onClick={() => dispatch({ type: 'div', value1: val1, value2: val2 })}>/</button>
+                    <button onClick={() => dispatch({ type: '+', value1: val1, value2: val2 })}>+</button>
+                    <button onClick={() => dispatch({ type: '-', value1: val1, value2: val2 })}>-</button>
+                    <button onClick={() => dispatch({ type: '*', value1: val1, value2: val2 })}>*</button>
+                    <button onClick={() => dispatch({ type: '/', value1: val1, value2: val2 })}>/</button>
                     <br />
-                    Result : {state.result}
+                    Result :
+                    <br />
+                    {state.value1}  {state.type} {state.value2} = {state.result}
                 </React.Fragment>
             );
         }
