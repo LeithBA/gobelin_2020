@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const Circle = ({ number, color }) => (
   <StyledCircle>
@@ -16,7 +16,17 @@ const Circle = ({ number, color }) => (
   </StyledCircle>
 );
 
+const Animation = keyframes`
+    from {
+    transform: rotate(0deg);
+    }
+    to {
+    transform: rotate(360deg);
+    }
+`;
+
 const StyledCircle = styled.svg`
+  animation: ${Animation} 1.0s ease-in-out infinite;
   width: 100px;
   height: 100px;
 
@@ -24,7 +34,13 @@ const StyledCircle = styled.svg`
     stroke: #5652BF;
     stroke-linecap: round;
   }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
   }
 `;
+
 
 export default Circle;

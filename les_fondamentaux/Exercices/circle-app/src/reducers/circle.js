@@ -1,47 +1,39 @@
-const initialState = { circles: [] };
+const initialState = { circles: [], animateOdd: true };
 
 const reducer = (state, action) => {
-    console.log("REDUCER HEARD DISPATCH: " + action.type)
-
     switch (action.type) {
         case 'ADD':
-            //circ.push(String(state.count + 1))
+            const col = '#' + ((0.99 + Math.random() * 0.01) * 0xFFFFFF << 0).toString(16);
             const circle = {
                 number: (state.circles.length + 1),
-                color: ("#" + ((1 << 24) * (0.7 + Math.random() * 0.3) | 0).toString(16))
+                color: col,
+                animate: (state.animateOdd && (state.circles.length + 1) % 2 == 1 ? true : false)
             }
             return { ...state, circles: state.circles.concat(circle) };
+
         case 'SHUFFLE':
-            return { ...state, circles: shuffle(state.circles) };
+            return { ...state, circles: state.circles.sort(() => Math.random() - 0.5) };
+
         case 'STOP_ODD':
-            return { ...state };
+            state.circles.forEach(circle => {
+                if (circle.number % 2 == 1)
+                    circle.animate = false;
+            });
+            return { ...state, animateOdd: false };
+
         case 'START_ODD':
-            return { ...state };
+            state.circles.forEach(circle => {
+                if (circle.number % 2 == 1)
+                    circle.animate = true;
+            });
+            return { ...state, animateOdd: true };
+
         case 'RESET':
             return { ...state, circles: [] };
+
         default:
             return state;
     }
 }
-
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-
-        // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-}
-
 
 export { reducer, initialState };
